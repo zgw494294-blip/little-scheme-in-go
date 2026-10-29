@@ -371,6 +371,11 @@ func Evaluate(exp Any, env *Environment) (result Any, err error) {
 			}
 		}
 	}()
+	// Expand user-defined syntax-rules macros before evaluation.  Expansion
+	// is pure (it never evaluates arguments) and results in ordinary datum
+	// using the original interned symbols and fresh lexical keys, so all
+	// existing evaluator behavior is preserved when no macros are involved.
+	exp = ExpandTopLevel(exp)
 	for {
 	Loop1:
 		for {
